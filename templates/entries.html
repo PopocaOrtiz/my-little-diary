@@ -1,3 +1,18 @@
+<form action="/entries">
+    <input type="text" name="search" value="{{search}}">
+</form>
+<table>
+    <tr>
+        <th>content</th>
+        <th>date</th>
+    </tr>
+    {% for entry in entries %}
+    <tr>
+        <td>{{entry.content}}</td>
+        <th>{{entry.date_created.date()}}</th>
+    </tr>
+    {% endfor %}
+</table>
 <form action="/entries" method="POST">
     <input type="text" name="content">
 </form>

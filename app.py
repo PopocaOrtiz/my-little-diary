@@ -29,11 +29,17 @@ def entries():
         try:
             db.session.add(entry)
             db.session.commit()
-            return f'entry {entry.id} created'
+            return redirect('/entries')
         except Exception as ex:
             return f'An error has ocurred {ex}'
     else:
-        return render_template('entries.html')
+        search = request.args.get('search')
+        query = Entry.query
+        if search:
+            query = query.filter(Entry.content.like(f'%{search}'))
+        query = query.order_by(Entry.date_created).limit(10)
+        entries = query.all()
+        return render_template('entries.html', entries=entries, search=search)
 
 
 if __name__ == '__main__':
