@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, redirect, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -37,9 +38,19 @@ def entries():
         query = Entry.query
         if search:
             query = query.filter(Entry.content.like(f'%{search}'))
-        query = query.order_by(Entry.date_created).limit(10)
-        entries = query.all()
-        return render_template('entries.html', entries=entries, search=search)
+        else:
+            search = ''
+
+        query = query.order_by(desc(Entry.date_created))
+
+        per_page = 10
+        page = request.args.get('page')
+        page = int(page) if page else 1
+        paginate = query.paginate(page, per_page, error_out=False)
+
+        # return str(query)
+
+        return render_template('entries.html', paginate=paginate, search=search)
 
 
 if __name__ == '__main__':
