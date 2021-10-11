@@ -8,10 +8,10 @@ Web App for writing a personal diary using social media features
 # current features 
 
 # todo list v1
-- [ ] post an entry 
-- [ ] list (last) entries
-- [ ] search entries
-- [ ] paginate entries
+- [x] post an entry 
+- [x] list (last) entries
+- [x] search entries
+- [x] paginate entries
 - [ ] when posting an entry also save tags
 - [ ] filter by tag using the search box (#)
 - [ ] highligh tags when showing entries
