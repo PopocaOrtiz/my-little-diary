@@ -1,5 +1,5 @@
 <form action="/entries">
-    <input type="text" name="search" value="{{search}}">
+    <input type="text" name="search" value="{{search}}" placeholder="search">
 </form>
 <table>
     <tr>
@@ -20,5 +20,5 @@
     <a href="{{url_for('entries', page=paginate.prev_num)}}">prev</a>
 {% endif %}
 <form action="/entries" method="POST">
-    <input type="text" name="content">
+    <input type="text" name="content" placeholder="new entry">
 </form>
