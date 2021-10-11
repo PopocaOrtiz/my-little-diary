@@ -12,7 +12,7 @@ Web App for writing a personal diary using social media features
 - [x] list (last) entries
 - [x] search entries
 - [x] paginate entries
-- [ ] when posting an entry also save tags
+- [x] when posting an entry also save tags
 - [ ] filter by tag using the search box (#)
 - [ ] highligh tags when showing entries
 - [ ] click in (highlighted) tags to filter entries

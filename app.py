@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import Flask, render_template, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
+from tags import detect_tags
+from tags.models import Tag, EntryTag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -26,13 +28,8 @@ def index():
 def entries():
     if request.method == 'POST':
         entry_content = request.form['content']
-        entry = Entry(content=entry_content)
-        try:
-            db.session.add(entry)
-            db.session.commit()
-            return redirect('/entries')
-        except Exception as ex:
-            return f'An error has ocurred {ex}'
+        save_entry(entry_content)
+        return redirect('/entries')
     else:
         search = request.args.get('search')
         query = Entry.query
@@ -51,6 +48,26 @@ def entries():
         # return str(query)
 
         return render_template('entries.html', paginate=paginate, search=search)
+
+
+def save_entry(entry_content: str):
+
+    entry = Entry(content=entry_content)
+    db.session.add(entry)
+    db.session.commit()
+
+    tags = detect_tags(entry_content)
+    for tag_content in tags:
+        tag_exists = Tag.query.filter(Tag.tag==tag_content).first()
+        if not tag_exists:
+            tag_exists = Tag(tag=tag_content)
+            db.session.add(tag_exists)
+            db.session.commit()
+
+        entry_tag = EntryTag(tag=tag_exists.id, entry=entry.id)
+        db.session.add(entry_tag)
+
+    db.session.commit()
 
 
 if __name__ == '__main__':
