@@ -95,7 +95,7 @@ def save_entry(entry_content: str):
 
     tags = detect_tags(entry_content)
     for tag_content in tags:
-        tag_exists = Tag.query.filter(Tag.tag==tag_content).first()
+        tag_exists = get_tag(tag_content)
         if not tag_exists:
             tag_exists = Tag(tag=tag_content)
             db.session.add(tag_exists)
@@ -106,6 +106,9 @@ def save_entry(entry_content: str):
 
     db.session.commit()
 
+
+def get_tag(tag_content: str) -> Union[Tag, None]:
+    return Tag.query.filter(Tag.tag == tag_content).first()
 
 if __name__ == '__main__':
     app.run(debug=True)
