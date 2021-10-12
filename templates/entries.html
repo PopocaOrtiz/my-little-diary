@@ -6,19 +6,13 @@
         <th>content</th>
         <th>date</th>
     </tr>
-    {% for entry in paginate.items %}
+    {% for entry in paginate %}
     <tr>
         <td>{{entry.content}}</td>
-        <th>{{entry.date_created.date()}} {{entry.date_created.time()}}</th>
+        <td>{{entry.date_created}}</td>
     </tr>
     {% endfor %}
 </table>
-{% if paginate.has_next %}
-    <a href="{{url_for('entries', page=paginate.next_num)}}">next</a>
-{% endif %}
-{% if paginate.has_prev %}
-    <a href="{{url_for('entries', page=paginate.prev_num)}}">prev</a>
-{% endif %}
 <form action="/entries" method="POST">
     <input type="text" name="content" placeholder="new entry">
 </form>
