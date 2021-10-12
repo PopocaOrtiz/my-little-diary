@@ -1,9 +1,10 @@
 from datetime import datetime
 from flask import Flask, render_template, redirect, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
+from sqlalchemy import desc, text
 from tags import detect_tags
 from tags.models import Tag, EntryTag
+from typing import Union
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -24,7 +25,7 @@ def index():
     return redirect('/entries')
 
 
-@app.route('/entries', methods=['POST','GET'])
+@app.route('/entries', methods=['POST', 'GET'])
 def entries():
     if request.method == 'POST':
         entry_content = request.form['content']
@@ -32,26 +33,62 @@ def entries():
         return redirect('/entries')
     else:
         search = request.args.get('search')
-        query = Entry.query
-        if search:
-            query = query.filter(Entry.content.like(f'%{search}'))
-        else:
-            search = ''
+        paginate = get_entries(search)
 
-        query = query.order_by(desc(Entry.date_created))
-
-        per_page = 10
-        page = request.args.get('page')
-        page = int(page) if page else 1
-        paginate = query.paginate(page, per_page, error_out=False)
-
-        # return str(query)
+        search = search if search else ''
 
         return render_template('entries.html', paginate=paginate, search=search)
 
 
-def save_entry(entry_content: str):
+def get_entries(search: Union[str, None], page=0) -> list[dict]:
+    sql = """
+        select content, date_created
+        from entry  
+        where true
+    """
 
+    params = {}
+
+    if search:
+
+        tags = detect_tags(search)
+        if len(tags):
+
+            for i, tag in enumerate(tags):
+                sql_tags = f"""
+                    select entry
+                    from entry_tag
+                    join tag on entry_tag.tag = tag.id
+                    where tag.tag like :tag_{i}
+                """
+                params[f'tag_{i}'] = tag
+                sql += f"""
+                    and id in (
+                        {sql_tags} 
+                    )
+                """
+
+                # clear the search text so it no longer has the tags
+                search = search.replace(f'#{tag}', '')
+
+        search = search.strip()
+        if search:
+            sql += f"""
+                and content like :content 
+            """
+            params['content'] = f'%{search}'
+
+    sql += f"""
+        order by date_created desc
+        limit 10 offset {page * 10}
+    """
+
+    print(sql, params)
+
+    return db.engine.execute(text(sql), params)
+
+
+def save_entry(entry_content: str):
     entry = Entry(content=entry_content)
     db.session.add(entry)
     db.session.commit()
