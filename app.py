@@ -110,5 +110,17 @@ def save_entry(entry_content: str):
 def get_tag(tag_content: str) -> Union[Tag, None]:
     return Tag.query.filter(Tag.tag == tag_content).first()
 
+
+def main():
+    search = '#one #two three'
+    search = None
+    entries = get_entries(search)
+    entries = list(entries)
+    print(f'total: {len(entries)}')
+    for entry in entries:
+        print(entry['content'])
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+    # main()
