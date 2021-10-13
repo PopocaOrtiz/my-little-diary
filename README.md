@@ -33,3 +33,9 @@ Web App for writing a personal diary using social media features
 - python
 - flask
 - sqllite
+- python-dotenv
+
+# run
+```
+export FLASK_APP=server.py
+```
