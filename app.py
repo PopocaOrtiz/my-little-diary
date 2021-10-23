@@ -2,9 +2,10 @@ from datetime import datetime
 from flask import Flask, render_template, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, text
-from tags import detect_tags
+from tags import detect_tags, replace_tags_with_links
 from tags.models import Tag, EntryTag
 from typing import Union
+from users.models import User
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -85,7 +86,15 @@ def get_entries(search: Union[str, None], page=0) -> list[dict]:
 
     print(sql, params)
 
-    return db.engine.execute(text(sql), params)
+    entries = db.engine.execute(text(sql), params)
+
+    entries_parsed = []
+    for entry in entries:
+        entry_to_parse = dict(entry)
+        entry_to_parse['content'] = replace_tags_with_links(entry['content'])
+        entries_parsed.append(entry_to_parse)
+
+    return entries_parsed
 
 
 def save_entry(entry_content: str):

@@ -14,12 +14,13 @@ Web App for writing a personal diary using social media features
 - [x] paginate entries
 - [x] when posting an entry also save tags
 - [x] filter by tag using the search box (#)
-- [ ] highligh tags when showing entries
+- [x] highligh tags when showing entries
 - [ ] click in (highlighted) tags to filter entries
 - [ ] when posting an entry also save people
 - [ ] filter by people using the search box (@) 
 - [ ] highligh people when showing entries
 - [ ] click in (highlighted) people to filter entries
+- [ ] sanitize when input an entry text 
 
 # todo list v2
 - [ ] attach photos to entries 
