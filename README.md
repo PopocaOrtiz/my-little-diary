@@ -16,7 +16,7 @@ Web App for writing a personal diary using social media features
 - [x] filter by tag using the search box (#)
 - [x] highligh tags when showing entries
 - [x] move the app to the new structure
-- [ ] click in (highlighted) tags to filter entries
+- [x] click in (highlighted) tags to filter entries
 - [ ] when posting an entry also save people
 - [ ] filter by people using the search box (@) 
 - [ ] highligh people when showing entries
@@ -25,11 +25,12 @@ Web App for writing a personal diary using social media features
 
 # todo list v2
 - [ ] attach photos to entries 
+- [ ] save locations
 - [ ] people's profile
- - [ ] show a short description
- - [ ] show last messages(and paginate)
- - [ ] show last tags(and how many time they are used)
- - [ ] show relations with other people
+- [ ] show a short description
+- [ ] show last messages(and paginate)
+- [ ] show last tags(and how many time they are used)
+- [ ] show relations with other people
 
 # requirements
 - python
@@ -41,4 +42,5 @@ Web App for writing a personal diary using social media features
 # run
 ```
 export FLASK_APP=server.py
+flask run
 ```
