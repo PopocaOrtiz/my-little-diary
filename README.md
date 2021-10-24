@@ -15,6 +15,7 @@ Web App for writing a personal diary using social media features
 - [x] when posting an entry also save tags
 - [x] filter by tag using the search box (#)
 - [x] highligh tags when showing entries
+- [x] move the app to the new structure
 - [ ] click in (highlighted) tags to filter entries
 - [ ] when posting an entry also save people
 - [ ] filter by people using the search box (@) 

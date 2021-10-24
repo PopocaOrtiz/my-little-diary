@@ -1,4 +1,6 @@
 import re
+from typing import Union
+from .models import Tag
 
 tag_regex = r'(^|[ ])#([a-zA-Z0-9]*)'
 
@@ -19,4 +21,7 @@ def replace_tags_with_links(entry_content: str) -> str:
         entry_content = entry_content.replace(f'#{tag}', f'<a href="/entries?search=%23{tag}">#{tag}</a>')
 
     return entry_content
-    return re.sub(tag_regex,  r'"\1\1":', entry_content)
+
+
+def get_tag(tag_content: str) -> Union[Tag, None]:
+    return Tag.query.filter(Tag.tag == tag_content).first()
